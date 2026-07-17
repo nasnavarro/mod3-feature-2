@@ -1,61 +1,77 @@
-# Módulo 3 | Feature 1 — Fundamentos React + UI base del e-commerce
+# Módulo 3 | Feature 2 — Conexión con API real + Formularios + Custom Hooks
 
 ## Objetivo de la feature
 
-Construir la base del frontend con React, entendiendo:
+Conectar el frontend con el backend real, entendiendo:
 
-- Qué es React y cómo se basa en componentes
-- Cómo estructurar una aplicación real (pages + components)
-- Cómo pasar datos con props
-- Cómo gestionar estado básico con useState
-- Cómo navegar entre páginas con react-router-dom
-- Cómo construir una UI completa de catálogo
+- Cómo consumir una API con Axios
+- Cómo gestionar datos asíncronos con useEffect
+- Cómo encapsular lógica en custom hooks
+- Cómo manejar estados de loading y error
+- Cómo crear formularios controlados
+- Cómo interactuar con el DOM usando useRef
 
 ### Importante
 
-Esta feature (la tienda) se construye en Sprint 1 + Sprint 2.
-En este sprint nos centramos en la UI y estructura.
+Esta feature empezó en el Sprint 1 y continúa aquí.
 
-Si no llegas a todo, no pasa nada.
-En el Sprint 2 continuaremos construyendo la UI mientras conectamos la API.
+En este sprint:
 
-Ejemplo guía: https://shop-example-react.netlify.app/sprint-1/
+- Sustituimos los datos mock por datos reales
+- Seguimos construyendo parte de la UI
+- Añadimos nuevas funcionalidades (auth, reviews, hooks)
+
+Aquí tienes el ejemplo que puedes tomar como guía. Navega por la página: https://shop-example-react.netlify.app/sprint-2/
 
 ## Requisitos
 
 ### Tech / configuración
 
-- Node.js 18+
-- Proyecto con Vite
-- React
-- react-router-dom
+- Backend corriendo en:
+
+```
+http://localhost:3000
+```
+
+- React + Vite
+- Axios instalado
 
 ```bash
-npm create vite@latest
-npm install
-npm install react-router-dom
-npm run dev
+npm install axios
 ```
 
 ### Estructura sugerida
 
 ```
 src/
+  api/
+    axios.js
+    products.js
+    reviews.js
+    auth.js
+  hooks/
+    useProducts.js
+    useProduct.js
+    useReviews.js
   styles/
     variables.css
     index.css
-  data/
-    mockProducts.js
   components/
     Layout/
     Header/
     Footer/
     ProductCard/
     ProductGrid/
+    StarRating/
+    ReviewList/
+    FormInput/
+    Button/
   pages/
     HomePage/
     ProductsPage/
     ProductDetailPage/
+    LoginPage/
+    RegisterPage/
     NotFoundPage/
   router/
     index.jsx
@@ -63,227 +79,236 @@ src/
   main.jsx
 ```
 
-### Rutas
+### Rutas obligatorias
 
 | Método | Ruta | Descripción |
 |---|---|---|
 | GET | / | Home |
 | GET | /products | Catálogo |
-| GET | /products/:id | Detalle |
+| GET | /products/:id | Detalle + reviews |
+| GET | /login | Login |
+| GET | /register | Registro |
 | GET | * | 404 |
 
 ## Qué hay que hacer (paso a paso)
 
-### 1) Crear el proyecto
+### 1) Crear instancia global de Axios
 
-- Crear proyecto con Vite
-- Limpiar archivos innecesarios
-- Crear estructura de carpetas
+En `src/api/axios.js`:
 
-Objetivo: base limpia y escalable.
-
-### 2) Configurar estilos globales
-
-- Crear `variables.css`
-- Crear `index.css`
-- Importar en `main.jsx`
-
-Objetivo: consistencia visual desde el inicio.
-
-### 3) Crear datos mock
-
-Crear `mockProducts.js` con:
+- Crear instancia con:
 
 ```js
-{
-  id,
-  title,
-  price,
-  image,
-  description
-}
+baseURL: 'http://localhost:3000'
 ```
 
-Objetivo: simular backend real (mismo shape que API futura).
+Objetivo: centralizar todas las llamadas HTTP.
 
-Ejemplo:
+### 2) Crear capa de API
+
+Separar llamadas por dominio:
+
+**products.js**
+- `getProducts()`
+- `getProductById(id)`
+
+**reviews.js**
+- `getReviews(productId)`
+
+**auth.js**
+- `login(data)`
+- `register(data)`
+
+Objetivo: no llamar a Axios directamente desde componentes.
+
+### 3) Crear custom hooks
+
+**useProducts**
+- Fetch al montar
+- useState + useEffect
+
+**useProduct**
+- Fetch por id
+
+**useReviews**
+- Fetch por producto
+
+Todos deben devolver:
 
 ```js
-export const MOCK_PRODUCTS = [
-  {
-    id: '1',
-    name: 'Camiseta Básica',
-    description: 'Camiseta de algodón 100%, cómoda y duradera. Disponible en varios colores.',
-    price: 19.99,
-    stock: 50,
-    imageUrl: 'https://placehold.co/400x400?text=Camiseta',
-    createdAt: '2024-01-01T00:00:00.000Z',
-  },
-  // ...
-]
+{ data, loading, error }
 ```
 
-Puedes usar la IA para que te cree por lo menos 10 productos.
+Objetivo: reutilizar lógica y limpiar componentes.
 
-### 4) Crear Layout y estructura base
+### 4) Sustituir mock por API real
 
-**Layout**
-- Header
-- Footer
-- `<Outlet />`
-
-**Header**
-- Navegación
-- Menú móvil (useState)
-
-**Footer**
-- Información básica
-
-Objetivo: estructura global de la app.
-
-### 5) Configurar routing
-
-En `router/index.jsx`:
-
-- `createBrowserRouter`
-- Layout como wrapper
-- Definir rutas
-
-Uso de:
-- `Link`
-- `NavLink`
-- `useParams`
-- `Outlet`
-
-Objetivo: navegación completa.
-
-### 6) Crear páginas
+- Eliminar `mockProducts.js`
+- Usar hooks en páginas:
 
 **HomePage**
-- Mostrar productos destacados
+- `useProducts()`
 
 **ProductsPage**
-- Mostrar todos los productos
-- Buscador con useState
+- `useProducts()` + filtro
 
 **ProductDetailPage**
-- Obtener id con useParams
-- Mostrar detalle
-- Contador de cantidad
+- `useProduct(id)`
+- `useReviews(id)`
 
-**NotFoundPage**
-- Página 404
+Objetivo: datos reales.
 
-Objetivo: primeras vistas reales del e-commerce.
+### 5) Gestionar estados
 
-### 7) Crear componentes de producto
+Cada pantalla debe manejar:
 
-**ProductCard**
-- Recibe `product` por props
+- `loading` → mostrar estado de carga
+- `error` → mostrar mensaje
 
-**ProductGrid**
-- Recibe `products`
-- Render con `.map()`
-- `key` obligatoria
+Objetivo: UX realista.
 
-Objetivo: reutilización + render dinámico.
+### 6) Crear componentes nuevos
+
+**StarRating**
+- Mostrar estrellas según rating
+
+**ReviewList**
+- Mostrar lista de reviews
+
+Este es opcional por el momento. Mientras no tengamos usuarios logueados no pondremos esto en activo.
+
+**Button**
+- Variantes: primary, secondary, danger
+
+Recuerda que puedes hacer un botón base y cambiarle las props dependiendo la necesidad.
+
+**FormInput**
+- label + input + error
+- reutilizable
+
+Objetivo: UI más completa y reutilizable.
+
+### 7) Crear formularios
+
+**LoginPage**
+- Formulario controlado
+- value + onChange
+- Validación básica
+- Llamada a `login()`
+
+**RegisterPage**
+- Formulario controlado
+- Validación (password, confirmación)
+
+Objetivo: primera interacción real con backend.
+
+### 8) Usar useRef
+
+En FormInput:
+
+- autofocus en primer input
+
+Objetivo: acceso directo al DOM sin re-render.
 
 ## Uso de la IA en este sprint
 
 ### Para guiarte
 
-- Explicación de React (componentes, props, estado)
-- Revisión de estructura
-- Debug de errores
+- Explicación de async/await
+- Revisión de hooks
+- Validación de formularios
+- Debug de peticiones
 
 ### Prompts útiles
 
-**Componentes**
+**Custom hooks**
 ```
-Estoy organizando una app en React con Layout, Header, Footer y ProductCard.
-¿Está bien separada la responsabilidad? ¿Qué mejoraría?
-```
-
-**Routing**
-```
-Explícame cómo funciona createBrowserRouter y Outlet en React Router.
+Estoy creando un custom hook en React para hacer fetch con useEffect.
+Quiero devolver { data, loading, error }.
+¿Estoy siguiendo una buena estructura?
 ```
 
-**Debug**
+**Axios**
 ```
-Tengo este error al renderizar una lista en React.
-Te paso el código. Dime las causas más probables.
+Estoy usando axios.create con baseURL.
+¿Cómo organizo mis llamadas para no repetir código?
+```
+
+**Formularios**
+```
+Estoy haciendo un formulario controlado en React.
+¿Cómo valido inputs antes de enviar al backend?
 ```
 
 ## Pistas
 
-**Props**
-Los datos bajan de padre a hijo.
+**useEffect**
+- Se ejecuta al montar (`[]`)
+- Dentro va la función async
 
-**useState**
-Se usa para:
-- Menú móvil
-- Buscador
-- Contador
+**Estados**
 
-**useParams**
+Siempre:
+
 ```js
-const { id } = useParams()
+loading → true al inicio
+error → null al inicio
 ```
 
-**Listas**
+**Flujo típico**
+
 ```js
-products.map(product => ...)
+try → petición
+catch → error
+finally → loading false
 ```
 
-Siempre con:
-```js
-key={product.id}
-```
+**Formularios**
+- Cada input tiene:
+  - value
+  - onChange
 
 ## Importante que tienen que tener en cuenta
 
-**Este sprint es visual**
-No hay backend real todavía.
+**Separación de capas**
+- `api` → llamadas HTTP
+- `hooks` → lógica
+- `pages` → UI
 
-**No sobrecomplicar**
-No hace falta lógica avanzada.
+**No mezclar lógica**
+No hacer fetch directamente en componentes.
 
-**Separación clara**
-- `components` → reutilizables
-- `pages` → vistas
+**Backend obligatorio**
+Si no funciona → revisar backend.
 
-**La UI no tiene que estar perfecta**
-Lo importante es la estructura, no el pixel perfect.
-En el Sprint 2 se seguirá trabajando esta UI.
+**Manejar errores**
+No asumir que todo funciona.
 
-**Routing correcto**
-Si el routing falla → la app no funciona.
+**UI sigue evolucionando**
+Este sprint también incluye mejoras visuales.
 
 ## Checks rápidos (autoevaluación)
 
-- [ ] `npm run dev` funciona
-- [ ] Navegación entre páginas funciona
-- [ ] `/products` muestra productos
+- [ ] Backend responde correctamente
+- [ ] `/products` muestra datos reales
 - [ ] `/products/:id` muestra detalle
-- [ ] Buscador funciona
-- [ ] 404 funciona
+- [ ] Reviews se cargan
+- [ ] Loading funciona
+- [ ] Error se muestra si falla
+- [ ] Login envía datos
+- [ ] Register valida correctamente
 
-## Qué pasará en el Sprint 2
+## Qué pasará en el Sprint 3
 
-- Eliminamos mockProducts
-- Conectamos con API real (`http://localhost:3000`)
-- Introducimos Axios
-- Introducimos useEffect
-- Creamos custom hooks
-- Añadimos login y registro
-- Seguimos construyendo UI
+- Gestión de estado global (Redux Toolkit)
+- Persistencia de sesión
+- Rutas privadas
+- Carrito y wishlist
 
 ## Enfoque del sprint
 
-- Construir base sólida
-- Entender React
-- No bloquearse en detalles
+- Entender el flujo real frontend-backend
+- Separar responsabilidades correctamente
+- Construir base escalable
 
-Avanza lo máximo posible, pero sin frustrarte si no llegas a todo.
-Este sprint se completa entre Sprint 1 y Sprint 2.
+Este sprint es clave: aquí pasas de maqueta a aplicación real.
