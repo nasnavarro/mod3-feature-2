@@ -1,0 +1,10 @@
+/* Estilos específicos para la página de inicio*/
+.homePage {
+  padding: 2rem;
+}
+
+.featuredWrapper {
+  background-color: var(--color-primary);
+  border-radius: 16px;
+  padding: 1.5rem;
+}

@@ -1,0 +1,116 @@
+.productDetailPage {
+  padding: 2rem;
+}
+
+.productBreadcrumbs {
+  display: block;
+  margin-bottom: 1.5rem;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.productBreadcrumbs a {
+  color: var(--color-text-secondary);
+  text-decoration: underline;
+}
+
+.productBreadcrumbs a:hover {
+  color: var(--color-primary);
+}
+
+.detailCard {
+  display: grid;
+  grid-template-columns: minmax(280px, 420px) 1fr;
+  gap: 2.5rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+@media (max-width: 700px) {
+  .detailCard {
+    grid-template-columns: 1fr;
+  }
+}
+
+.detailImage {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.detailInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.detailCategory {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-secondary-dark);
+}
+
+.detailName {
+  margin: 0.5rem 0 0.75rem;
+  font-size: var(--font-size-3xl);
+}
+
+.detailPrice {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+}
+
+.detailDescription {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+.detailStock {
+  margin-top: 1.5rem;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.quantities {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.quantityButton {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.quantityButton:hover {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+.quantityValue {
+  min-width: 1.5rem;
+  text-align: center;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
