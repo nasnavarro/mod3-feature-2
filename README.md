@@ -40,6 +40,43 @@ http://localhost:3000
 npm install axios
 ```
 
+### Backend de este ejercicio
+
+Usamos el backend ya construido en `modulo2/project-break2-backend` (API REST e-commerce de Project Break 2). Ya tiene implementadas todas las rutas que pide este sprint.
+
+Para levantarlo:
+
+```bash
+cd modulo2/project-break2-backend
+npm install
+npm run dev
+```
+
+Arranca en `http://localhost:3000`. Rutas relevantes para este sprint:
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| POST | /api/auth/register | Registro |
+| POST | /api/auth/login | Login |
+| GET | /api/products | Catálogo |
+| GET | /api/products/:id | Detalle |
+| GET | /api/products/:id/reviews | Reviews del producto |
+
+Datos: `Product` y `users` en Postgres (Supabase, vía Prisma); `Review` en MongoDB (Mongoose).
+
+**⚠️ Aviso: proyecto Supabase en plan gratuito**
+El proyecto de Supabase se **pausa automáticamente tras 7 días de inactividad** (límite del plan free). Si al arrancar el backend `/api/products` da error 500 con algo como `tenant/user ... not found` en la consola, significa que está pausado: entra al [dashboard de Supabase](https://supabase.com/dashboard), busca el proyecto y dale a reactivar/resume. Tarda 1-2 minutos en volver a estar operativo.
+
+### Comprobación automática del backend
+
+El frontend hace un chequeo rápido de `GET /health` al arrancar (`src/hooks/useBackendStatus.js`) y muestra un aviso en la parte superior de la página si el backend no responde. La URL se lee de `VITE_API_BASE_URL`.
+
+Copia `.env.example` a `.env` antes de arrancar (`.env` no se sube al repo):
+
+```bash
+cp .env.example .env
+```
+
 ### Estructura sugerida
 
 ```
