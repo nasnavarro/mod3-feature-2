@@ -6,7 +6,9 @@ export function useBackendStatus() {
   useEffect(() => {
     let cancelled = false
 
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/health`)
+    const backendOrigin = new URL(import.meta.env.VITE_API_BASE_URL).origin
+
+    fetch(`${backendOrigin}/health`)
       .then((res) => {
         if (!cancelled) setStatus(res.ok ? 'up' : 'down')
       })

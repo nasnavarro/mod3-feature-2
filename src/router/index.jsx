@@ -13,7 +13,7 @@ export const router = createBrowserRouter([
       // En la página de entrada por defecto se sustituye el path por index:true.
       { index: true, element: <HomePage /> },
       { path: 'products', element: <ProductsPage /> },
-      { path: 'products/:urlFriendly', element: <ProductDetailPage /> },
+      { path: 'products/:id', element: <ProductDetailPage /> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },

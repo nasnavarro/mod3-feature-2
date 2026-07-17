@@ -1,13 +1,25 @@
 import styles from './ProductDetailPage.module.css'
 import {useParams} from 'react-router-dom'
-import {MOCK_PRODUCTS} from '../../data/mockProducts.js'
+import {useProduct} from '../../hooks/useProduct.js'
+import {useReviews} from '../../hooks/useReviews.js'
 import {Link} from 'react-router-dom'
 import {useState} from 'react'
 
 function ProductDetailPage() {
-  const {urlFriendly} = useParams()
-  const product = MOCK_PRODUCTS.find(p => p.urlFriendly === urlFriendly)
+  const {id } = useParams()
+  const {data: product, loading, error } = useProduct(id)
   const [quantity, setQuantity] = useState(1)
+  const {data: reviews, loading: reviewsLoading, error: reviewsError } = useReviews(id)
+
+  if (loading) {
+    return <div className={styles.productDetailPage}>Cargando detalles del producto...</div>
+  }
+  if (error) {
+    return <div className={styles.productDetailPage}>Error al cargar detalles del producto</div>
+  }
+  if (!product) {
+    return <div className={styles.productDetailPage}>Producto no encontrado</div>
+  }
 
   // Función para aumentar la cantidad, asegurándose de no superar el stock disponible
   const addQuantity = () => {
@@ -23,10 +35,6 @@ function ProductDetailPage() {
     }
   }
 
-  if (!product) {
-    return <div className={styles.productDetailPage}>Producto no encontrado</div>
-  }
-
   return (
     <div className={styles.productDetailPage}>
       <span className={styles.productBreadcrumbs}>
@@ -37,7 +45,6 @@ function ProductDetailPage() {
         <img src={product.imageUrl} alt={product.name} className={styles.detailImage} />
 
         <div className={styles.detailInfo}>
-          <span className={styles.detailCategory}>{product.category}</span>
           <h1 className={styles.detailName}>{product.name}</h1>
           <p className={styles.detailPrice}>{product.price.toFixed(2)} €</p>
           <p className={styles.detailDescription}>{product.description}</p>
@@ -51,6 +58,23 @@ function ProductDetailPage() {
             <span className={styles.quantityValue}>{quantity}</span>
             <button onClick={addQuantity} className={styles.quantityButton}>+</button>
           </div>
+
+          <p className={styles.detailReviews}>Reseñas:</p>
+          {reviewsLoading && <p>Cargando reseñas...</p>}
+          {reviewsError && <p>Error al cargar reseñas</p>}
+          {reviews && reviews.length === 0 && (
+            <p>No hay reseñas disponibles.</p>
+          )}
+          {reviews && reviews.length > 0 && (
+            <div className={styles.reviewsList}>
+              {reviews.map((review) => (
+                <div key={review._id} className={styles.reviewItem}>
+                  <p>{review.comment}</p>
+                  <p>Calificación: {review.rating}/5</p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

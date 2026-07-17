@@ -1,14 +1,15 @@
 import styles from './ProductsPage.module.css'
 import { useState } from 'react'
-import {MOCK_PRODUCTS} from '../../data/mockProducts.js'
+import {useProducts} from '../../hooks/useProducts.js';
 import ProductGrid from '../../components/ProductGrid/ProductGrid'
 
 function ProductsPage() {
   const [searchTerm, setSearchTerm] = useState('')
+  const {data, loading, error} = useProducts();
 
-  const filteredProducts = MOCK_PRODUCTS.filter(product =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.category.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredProducts = data.filter(product =>
+    product.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.description?.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   return (
@@ -36,7 +37,12 @@ function ProductsPage() {
         </svg>
       </div>
       <h1>Productos</h1>
-      <ProductGrid products={filteredProducts} />
+      {loading && <p>Cargando productos...</p>}
+      {error && <p>Error al cargar productos: {error}</p>}
+      {!loading && !error && data.length === 0 && <p>No hay productos disponibles.</p>}
+      {!loading && !error && data.length > 0 && filteredProducts.length === 0 && <p>No hay productos disponibles que coincidan con el filtro.</p>}
+      {!loading && !error && data.length > 0 && filteredProducts.length > 0 &&
+      <ProductGrid products={filteredProducts} />}
     </div>
   )
 }
