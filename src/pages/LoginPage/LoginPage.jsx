@@ -8,6 +8,7 @@ import { useState } from "react";
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [formError, setFormError] = useState(null);
   const navigate = useNavigate();
 
@@ -48,7 +49,15 @@ function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Introduce tu contraseña"
         />
-        <Button type="submit">Iniciar Sesión</Button>
+        <FormInput
+          name="confirmPassword"
+          label="Confirmar Contraseña"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Introduce tu contraseña"
+        />
+        <Button type="submit">Registrarse</Button>
       </form>
     </div>
   );
