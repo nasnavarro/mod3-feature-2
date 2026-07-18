@@ -3,6 +3,7 @@ import {useParams} from 'react-router-dom'
 import {useProduct} from '../../hooks/useProduct.js'
 import {useReviews} from '../../hooks/useReviews.js'
 import StarRating from '../../components/StarRating/StarRating.jsx'
+import Button from '../../components/Button/Button.jsx'
 import {Link} from 'react-router-dom'
 import {useState} from 'react'
 
@@ -55,9 +56,13 @@ function ProductDetailPage() {
           </div>
 
           <div className={styles.quantities}>
-            <button onClick={removeQuantity} className={styles.quantityButton}>-</button>
+            <Button onClick={removeQuantity} variant="secondary">
+              -
+            </Button>
             <span className={styles.quantityValue}>{quantity}</span>
-            <button onClick={addQuantity} className={styles.quantityButton}>+</button>
+            <Button onClick={addQuantity} variant="secondary">
+              +
+            </Button>
           </div>
 
           <p className={styles.detailReviews}>Reseñas:</p>
