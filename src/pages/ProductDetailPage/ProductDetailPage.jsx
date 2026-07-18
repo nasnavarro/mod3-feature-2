@@ -2,6 +2,7 @@ import styles from './ProductDetailPage.module.css'
 import {useParams} from 'react-router-dom'
 import {useProduct} from '../../hooks/useProduct.js'
 import {useReviews} from '../../hooks/useReviews.js'
+import StarRating from '../../components/StarRating/StarRating.jsx'
 import {Link} from 'react-router-dom'
 import {useState} from 'react'
 
@@ -70,7 +71,7 @@ function ProductDetailPage() {
               {reviews.map((review) => (
                 <div key={review._id} className={styles.reviewItem}>
                   <p>{review.comment}</p>
-                  <p>Calificación: {review.rating}/5</p>
+                  <p>Calificación: <StarRating rating={review.rating} /></p>
                 </div>
               ))}
             </div>
