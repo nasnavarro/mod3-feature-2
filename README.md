@@ -67,6 +67,13 @@ Datos: `Product` y `users` en Postgres (Supabase, vía Prisma); `Review` en Mong
 **⚠️ Aviso: proyecto Supabase en plan gratuito**
 El proyecto de Supabase se **pausa automáticamente tras 7 días de inactividad** (límite del plan free). Si al arrancar el backend `/api/products` da error 500 con algo como `tenant/user ... not found` en la consola, significa que está pausado: entra al [dashboard de Supabase](https://supabase.com/dashboard), busca el proyecto y dale a reactivar/resume. Tarda 1-2 minutos en volver a estar operativo.
 
+### Credenciales de prueba
+
+Usuario ya registrado en el backend para probar `/login`:
+
+- **Email:** `test-verify@example.com`
+- **Contraseña:** `Test1234`
+
 ### Comprobación automática del backend
 
 El frontend hace un chequeo rápido de `GET /health` al arrancar (`src/hooks/useBackendStatus.js`) y muestra un aviso en la parte superior de la página si el backend no responde. La URL se lee de `VITE_API_BASE_URL`.

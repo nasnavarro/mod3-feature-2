@@ -21,6 +21,18 @@ function Header() {
         >
           Catálogo
         </NavLink>
+        <NavLink
+          to="/login"
+          className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}
+        >
+          Iniciar Sesión
+        </NavLink>
+        <NavLink
+          to="/register"
+          className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}
+        >
+          Registrarse
+        </NavLink>
       </nav>
     </header>
   )
