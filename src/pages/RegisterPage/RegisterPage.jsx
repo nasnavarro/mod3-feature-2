@@ -44,6 +44,7 @@ function RegisterPage() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Introduce tu correo electrónico"
+          autoFocus
         />
         <FormInput
           name="password"
